@@ -1,66 +1,97 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>College Attendance Portal</title>
-    <link rel="stylesheet" href="{% static 'StudentView/Index_Style.css' %}" />
-  </head>
-  <body>
-    <header class="header">
-      <h1 class="header-title">Inderprastha Engineering College</h1>
-      <h2>Attendance Portal</h2>
-    </header>
 
-    <div class="container">
-      <section class="attendance-section">
-        <h2 class="section-title">Select Your Name</h2>
-        <form
-          class="attendance-form"
-          method="POST"
-          action="{% url 'add_manually_post' %}"
-        >
-          {% csrf_token %}
-          <ul class="student-list">
-            {% for student in students %}
-            <li class="student">
-              <label class="student-label">
-                <span>
-                  {{student.s_roll}} - {{ student.s_fname }} {{student.s_lname}}
-                </span>
-                <span class="checkmark"></span>
-                <input
-                  type="checkbox"
-                  class="student-checkbox"
-                  name="student-name"
-                  value="{{student.s_roll}}"
-                />
-              </label>
-            </li>
-            {% endfor %}
-          </ul>
-          <button type="submit" class="submit-button">Submit</button>
-        </form>
-      </section>
-    </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College Attendance Portal</title>
+  <link rel="stylesheet" href="{% static 'StudentView/Index_Style.css' %}" />
+</head>
 
-    <footer class="footer">
-      <p>&copy; QR Attendance System 2023 - Team Hokage</p>
-    </footer>
+<body>
+  <header class="header">
+    <h1 class="header-title">Medicaps University</h1>
+    <h2>Attendance Portal</h2>
+  </header>
 
-    <script>
-      const checkboxes = document.querySelectorAll(".student");
+  <div class="container">
+    <section class="attendance-section">
+      <h2 class="section-title">Select Your Name</h2>
+      <form class="attendance-form" method="POST" action="{% url 'add_manually_post' %}">
+        {% csrf_token %}
+        <ul class="student-list">
+          <li class="student">
+            <label class="student-label">
+              <span>
+                2100300100111 - john Doe
+              </span>
+              <span class="checkmark"></span>
+              <input type="checkbox" class="student-checkbox" name="student-name" value="2100300100111" />
+            </label>
+          </li>
+          <li class="student">
+            <label class="student-label">
+              <span>
+                2100300100119 - Jane Smith
+              </span>
+              <span class="checkmark"></span>
+              <input type="checkbox" class="student-checkbox" name="student-name" value="2100300100119" />
+            </label>
+          </li>
+          <li class="student">
+            <label class="student-label">
+              <span>
+                2100300100117 - Bob Johnson
+              </span>
+              <span class="checkmark"></span>
+              <input type="checkbox" class="student-checkbox" name="student-name" value="2100300100117" />
+            </label>
+          </li>
+        </ul>
+        <button type="submit" class="submit-button" id="submit-btn" disabled>Submit</button>
+      </form>
+    </section>
+  </div>
 
-      checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener("change", () => {
-          checkboxes.forEach((otherCheckbox) => {
-            if (otherCheckbox !== checkbox) {
-              otherCheckbox.querySelector(".student-checkbox").checked = false;
-            }
-          });
+  <footer class="footer">
+    <p>&copy; QR Attendance System 2023 - Team Hokage</p>
+  </footer>
+
+  <script>
+    const checkboxes = document.querySelectorAll(".student");
+    const submitBtn = document.getElementById("submit-btn");
+
+    // Add visual cues for disabled state via CSS
+    submitBtn.style.opacity = "0.5";
+    submitBtn.style.cursor = "not-allowed";
+
+    checkboxes.forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
+        let isChecked = false;
+
+        checkboxes.forEach((otherCheckbox) => {
+          if (otherCheckbox !== checkbox) {
+            otherCheckbox.querySelector(".student-checkbox").checked = false;
+          }
+          if (otherCheckbox.querySelector(".student-checkbox").checked) {
+            isChecked = true;
+          }
         });
+
+        // Toggle submit button state depending on whether any checkbox is clicked
+        if (isChecked) {
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = "1";
+          submitBtn.style.cursor = "pointer";
+        } else {
+          submitBtn.disabled = true;
+          submitBtn.style.opacity = "0.5";
+          submitBtn.style.cursor = "not-allowed";
+        }
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
+
 </html>
